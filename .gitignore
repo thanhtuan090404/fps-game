@@ -1,0 +1,21 @@
+# Unity generated folders
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]ser[Ss]ettings/
+
+# Visual Studio cache
+.vs/
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
