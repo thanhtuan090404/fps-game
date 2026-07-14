@@ -5,7 +5,7 @@ public class Gun : MonoBehaviour
 {
     private float damage = 20f;
     private float range = 100f;
-    [SerializeField] public Camera playerCamera;
+    [SerializeField] private Camera playerCamera;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -20,9 +20,7 @@ public class Gun : MonoBehaviour
             Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * range, Color.red, 1f);
 
         }
-        if(Input.GetKeyDown(KeyCode.K)) GetComponent<Health>().TakeDamage(20f); // test giảm máu player
-        if (Input.GetKeyDown(KeyCode.H)) GetComponent<Health>().Heal(20f); // test hồi máu player
-
+       
     }
 
     private void Shoot()

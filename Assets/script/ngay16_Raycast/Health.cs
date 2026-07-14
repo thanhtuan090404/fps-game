@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    public float maxHealth = 100f;
-    public float currentHealth;
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float currentHealth;
     public event Action OnDeath;    
     public event Action<float> OnHealthChanged; // event để thông báo khi máu thay đổi
     bool isAlive => currentHealth > 0; // kiểm tra xem còn sống hay không
@@ -26,7 +26,7 @@ public class Health : MonoBehaviour
         }
     }
 
-    private void Die()
+    public void Die()
     {
         OnDeath?.Invoke(); // thông báo cho các listener biết đã chết
     }
@@ -38,15 +38,5 @@ public class Health : MonoBehaviour
         OnHealthChanged?.Invoke(currentHealth / maxHealth); // thông báo cho các listener biết máu đã thay đổi
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
