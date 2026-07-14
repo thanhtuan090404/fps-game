@@ -20,6 +20,9 @@ public class Gun : MonoBehaviour
             Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * range, Color.red, 1f);
 
         }
+        if(Input.GetKeyDown(KeyCode.K)) GetComponent<Health>().TakeDamage(20f); // test giảm máu player
+        if (Input.GetKeyDown(KeyCode.H)) GetComponent<Health>().Heal(20f); // test hồi máu player
+
     }
 
     private void Shoot()
@@ -28,10 +31,10 @@ public class Gun : MonoBehaviour
         {
             Debug.Log("trung :" + hit.transform.name);
             // kiểm tra xem có phải enemy không , nếu phải thi sẽ gây damage
-            Target target = hit.transform.GetComponent<Target>();  // lấy component Target của đối tượng bị trúng đạn
-            if (target != null) // nếu có component Target thì gây damage
+            Health health = hit.collider.GetComponent<Health>(); // object chứa collider này có script Health không
+            if (health != null)
             {
-                target.TakeDamage(damage);
+                health.TakeDamage(damage);
             }
         }
     }

@@ -1,0 +1,30 @@
+using System;
+using UnityEngine;
+
+public class PlayerHealth : MonoBehaviour
+{
+    public Health health;
+
+
+
+     void Awake()
+    {
+        health = GetComponent<Health>();
+        health.OnDeath += HandleDeath;
+        health.OnHealthChanged += HandleHealthChanged;
+    }
+
+    private void HandleHealthChanged(float obj)
+    {
+        Debug.Log("Player health changed: " + obj);
+    }
+
+    private void HandleDeath()
+    {
+        Debug.Log("Player has died.");
+    }
+    void OnDestroy()
+    {
+        health.OnDeath -= HandleDeath;
+    }
+}
