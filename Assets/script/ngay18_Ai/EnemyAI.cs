@@ -3,15 +3,15 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    private NavMeshAgent agent;
+    private NavMeshAgent agent; // biến lưu trữ component NavMeshAgent của enemy
     [SerializeField] private Transform player;
-    [SerializeField] private float detectRange = 5f;
-    private State _currentState = State.Patrol;
+    [SerializeField] private float detectRange = 5f; 
+    private State _currentState = State.Patrol; // trạng thái hiện tại của enemy
 
     [SerializeField] private Transform[] PointsA;
     [SerializeField] private Transform[] PointB;
-    [SerializeField] private Transform target;
-    private bool isGoingToA = true;
+    [SerializeField] private Transform target; // điểm mà enemy đang di chuyển đến
+    private bool isGoingToA = true; // biến để xác định xem enemy đang đi đến điểm A hay điểm B
     private enum State
     {
         Patrol, Chase
@@ -37,7 +37,7 @@ public class EnemyAI : MonoBehaviour
 
 
         }
-        float distance = Vector3.Distance(transform.position, player.position);
+        float distance = Vector3.Distance(transform.position, player.position); // tính khoảng cách giữa enemy và player
         if (distance < detectRange)
         {
             _currentState = State.Chase;
@@ -46,7 +46,7 @@ public class EnemyAI : MonoBehaviour
         {
             _currentState = State.Patrol;
         }
-        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
+        if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance) // kiểm tra xem enemy đã đến điểm đích chưa
         {
             ChooseNextPoint();
         }
