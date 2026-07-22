@@ -453,6 +453,7 @@ MonoBehaviour:
   playerCamera: {fileID: 833787531}
   currentAmmo: 0
   bulletPrefab: {fileID: 2029344368374246087, guid: 4d5cf32bdaaabd649912304c75df38a3, type: 3}
+  muzzleFlash: {fileID: 6658004794195492696, guid: d1c5ed04cc5a7a8448db1389b025a5ad, type: 3}
 --- !u!114 &289594689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1075,6 +1076,37 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!1 &835910182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 835910183}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &835910183
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835910182}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1320227336
 GameObject:
   m_ObjectHideFlags: 0
@@ -1361,3 +1393,4 @@ SceneRoots:
   - {fileID: 2127813160}
   - {fileID: 1657950429}
   - {fileID: 1540368828}
+  - {fileID: 835910183}

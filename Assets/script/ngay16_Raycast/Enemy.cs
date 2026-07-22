@@ -13,6 +13,7 @@ public class Enemy : MonoBehaviour
 
     private void HandleDeath()
     {
+        GameManager.Instance.AddKill(); // gọi phương thức AddSkill() của GameManager khi Enemy chết
         // Xử lý khi Enemy chết
         Debug.Log("Enemy has died.");
         Destroy(gameObject); // hủy đối tượng Enemy
@@ -20,7 +21,7 @@ public class Enemy : MonoBehaviour
     }
     private void OnDestroy()
     {
-        health.OnDeath -= HandleDeath; // hủy đăng ký sự kiện OnDeath khi Enemy bị hủy
+        if (health != null) health.OnDeath -= HandleDeath;   // nhớ unsubscribe!
     }
 }
 
