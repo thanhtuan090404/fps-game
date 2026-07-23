@@ -32,7 +32,6 @@ public class PlayerHealth : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K)) health.TakeDamage(20f);   // test mất máu
         if (Input.GetKeyDown(KeyCode.H)) health.Heal(20f);          // test hồi máu
     }
 }
