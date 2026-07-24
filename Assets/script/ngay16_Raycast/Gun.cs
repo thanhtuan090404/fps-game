@@ -4,14 +4,14 @@ using System.Collections;
 
 public class Gun : MonoBehaviour
 {
-    private float damage = 20f;
-    private float range = 100f;
+  [SerializeField]  private float damage = 20f;
+    [SerializeField] private float range = 100f;
     [SerializeField] private Camera playerCamera;
 
-    private int maxAmmo = 30;
-    [SerializeField] private int currentAmmo;
+    [SerializeField] private int maxAmmo = 30;
+     private int currentAmmo;
     private bool _isReloading = false;
-    private float reloadTime = 2f;
+    [SerializeField] private float reloadTime = 2f;
 
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private ParticleSystem muzzleFlash;
@@ -22,6 +22,7 @@ public class Gun : MonoBehaviour
     void Start()
     {
         currentAmmo = maxAmmo;
+        OnAmmoChanged?.Invoke(currentAmmo, maxAmmo); // thông báo cho các listener biết số đạn đã thay đổi
     }
 
     // Update is called once per frame
