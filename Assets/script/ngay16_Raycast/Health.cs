@@ -7,6 +7,7 @@ public class Health : MonoBehaviour
     [SerializeField] private float currentHealth;
     public event Action OnDeath;    
     public event Action<float> OnHealthChanged; // event để thông báo khi máu thay đổi
+    public float CurrentHealthPercent => currentHealth / maxHealth; // tính phần trăm máu hiện tại
     bool isAlive => currentHealth > 0; // kiểm tra xem còn sống hay không
 
     private void Awake()

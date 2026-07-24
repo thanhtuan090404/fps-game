@@ -16,6 +16,8 @@ public class Gun : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private ParticleSystem muzzleFlash;
 
+    public event Action<int, int> OnAmmoChanged; // event để thông báo khi số đạn thay đổi
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -52,6 +54,7 @@ public class Gun : MonoBehaviour
         yield return new WaitForSeconds(reloadTime); // tạm dừng 2s để nạp đạn 
 
         currentAmmo = maxAmmo;
+        OnAmmoChanged?.Invoke(currentAmmo, maxAmmo); // thông báo cho các listener biết số đạn đã thay đổi
         _isReloading = false;
         Debug.Log("Nạp XOng");
     }
@@ -60,6 +63,7 @@ public class Gun : MonoBehaviour
     {
         muzzleFlash.Play(); // phát hiệu ứng bắn đạn
         currentAmmo--;
+        OnAmmoChanged?.Invoke(currentAmmo, maxAmmo); // thông báo cho các listener biết số đạn đã thay đổi
 
         if (Physics.Raycast(playerCamera.transform.position,playerCamera.transform.forward, out RaycastHit hit, range))
         {

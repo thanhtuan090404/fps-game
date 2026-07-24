@@ -5,13 +5,14 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     private NavMeshAgent agent; // biến lưu trữ component NavMeshAgent của enemy
-    [SerializeField] private Transform player;
+     private Transform player;
     private Health playerHealth; // biến lưu trữ component Health của player
     [SerializeField] private float detectRange = 5f; 
     [SerializeField]private float attackRange = 2f; // khoảng cách để tấn công player 
     private bool isAttacking = false; // biến để xác định xem enemy có đang tấn công hay không
-    private float attackWindup = 1f; // thời gian chờ trước khi gây sát thương
-    private float attackCooldown = 1f; // thời gian chờ trước khi có thể tấn công lại
+   [SerializeField] private float attackWindup = 1f; // thời gian chờ trước khi gây sát thương
+    [SerializeField]  private float attackCooldown = 1f; // thời gian chờ trước khi có thể tấn công lại
+    [SerializeField] private float damage = 10f;
 
 
     private State _currentState = State.Patrol; // trạng thái hiện tại của enemy
@@ -41,30 +42,30 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float distance = Vector3.Distance(transform.position, player.position);
+
         switch (_currentState)
         {
             case State.Patrol:
                 agent.SetDestination(target.position);
+                PatrolState(distance);
+
+                if (!agent.pathPending &&
+                    agent.remainingDistance <= agent.stoppingDistance)
+                {
+                    ChooseNextPoint();
+                }
                 break;
+
             case State.Chase:
                 agent.SetDestination(player.position);
+                ChaseState(distance);
                 break;
 
-
+            case State.Attack:
+                AttackState(distance);
+                break;
         }
-        float distance = Vector3.Distance(transform.position, player.position); // tính khoảng cách giữa enemy và player
-        switch (_currentState)
-        {
-            case State.Patrol: PatrolState(distance); break;
-            case State.Chase: ChaseState(distance); break;
-            case State.Attack: AttackState(distance); break;
-        }
-        if (_currentState == State.Patrol && !agent.pathPending && agent.remainingDistance <= agent.stoppingDistance) // kiểm tra xem enemy đã đến điểm đích chưa
-        {
-            ChooseNextPoint();
-        }
-        
-        
     }
 
     private void ChaseState(float distance)
@@ -103,7 +104,7 @@ public class EnemyAI : MonoBehaviour
         yield return new WaitForSeconds(attackWindup); // chờ 1 giây trước khi gây sát thương
         if (playerHealth != null && Vector3.Distance(transform.position, player.position) <= attackRange)
         {
-            playerHealth.TakeDamage(10f); // gây sát thương cho player
+            playerHealth.TakeDamage(damage); // gây sát thương cho player
         }
         yield return new WaitForSeconds(attackCooldown); // chờ 1 giây trước khi có thể tấn công lại
         isAttacking = false; // đánh dấu là đã tấn công xong
@@ -144,5 +145,9 @@ public class EnemyAI : MonoBehaviour
             target = PointsA[Random.Range(0, PointsA.Length)];
             isGoingToA = true;
         }
+    }
+    private void OnDisable()
+    {
+        isAttacking = false;
     }
 }

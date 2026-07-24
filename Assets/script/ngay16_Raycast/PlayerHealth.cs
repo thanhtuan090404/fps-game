@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public Health health;
+    private Health health;
 
 
 
@@ -14,15 +14,14 @@ public class PlayerHealth : MonoBehaviour
         health.OnHealthChanged += HandleHealthChanged;
     }
 
-    private void HandleHealthChanged(float obj)
+    private void HandleHealthChanged(float healthPercent)
     {
-        Debug.Log("Player health changed: " + obj);
+       
     }
 
     private void HandleDeath()
     {
         GameManager.Instance.GameOver();
-        health.OnDeath -= HandleDeath;
         Debug.Log("Player has died.");
     }
     void OnDestroy()
@@ -30,8 +29,5 @@ public class PlayerHealth : MonoBehaviour
         health.OnDeath -= HandleDeath;
         health.OnHealthChanged -= HandleHealthChanged;
     }
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.H)) health.Heal(20f);          // test hồi máu
-    }
+  
 }
