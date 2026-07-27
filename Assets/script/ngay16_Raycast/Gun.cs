@@ -16,6 +16,10 @@ public class Gun : MonoBehaviour
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private ParticleSystem muzzleFlash;
 
+    [SerializeField] private AudioClip shootClip;
+    [SerializeField] private AudioClip emptyClip;
+    [SerializeField] private AudioClip reloadClip;
+
     public event Action<int, int> OnAmmoChanged; // event để thông báo khi số đạn thay đổi
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,18 +36,21 @@ public class Gun : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKeyDown(KeyCode.R) || currentAmmo <= 0)
+        if (Input.GetKeyDown(KeyCode.R) )
         {
             StartCoroutine(Reload());
             return;
         }
         if (Input.GetMouseButtonDown(0))
         {
+            if (currentAmmo <= 0)
+            {
+                AudioManager.Instance.PlayerSFX(emptyClip); // phát âm thanh bắn đạn hết
+                return;
+            }
             Shoot();
             
-            
-            Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * range, Color.red, 1f);
-
+           
         }
        
     }
@@ -52,6 +59,7 @@ public class Gun : MonoBehaviour
     {
         _isReloading = true;
         Debug.Log("Reloading...");
+        AudioManager.Instance.PlayerSFX(reloadClip); // phát âm thanh nạp đạn
         yield return new WaitForSeconds(reloadTime); // tạm dừng 2s để nạp đạn 
 
         currentAmmo = maxAmmo;
@@ -62,10 +70,13 @@ public class Gun : MonoBehaviour
 
     private void Shoot()
     {
-        muzzleFlash.Play(); // phát hiệu ứng bắn đạn
+        if (muzzleFlash != null)
+        {
+            muzzleFlash.Play(); // phát hiệu ứng bắn đạn
+        }
         currentAmmo--;
         OnAmmoChanged?.Invoke(currentAmmo, maxAmmo); // thông báo cho các listener biết số đạn đã thay đổi
-
+        AudioManager.Instance.PlayerSFX(shootClip); // phát âm thanh bắn đạn
         if (Physics.Raycast(playerCamera.transform.position,playerCamera.transform.forward, out RaycastHit hit, range))
         {
             Vector3 spawnPos =

@@ -21,6 +21,14 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private Transform[] PointB;
     [SerializeField] private Transform target; // điểm mà enemy đang di chuyển đến
     private bool isGoingToA = true; // biến để xác định xem enemy đang đi đến điểm A hay điểm B
+
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip[] footstepClip; // mảng lưu trữ các clip âm thanh bước chân của enemy
+    [SerializeField] private AudioClip attackClip; // clip âm thanh khi enemy tấn công player
+    [SerializeField] private float stepInterval = 0.5f; // khoảng thời gian giữa các bước chân
+
+    private float footstepTimer = 0f; // biến đếm thời gian giữa các bước chân
+
     private enum State
     {
         Patrol, Chase , Attack
@@ -66,6 +74,35 @@ public class EnemyAI : MonoBehaviour
                 AttackState(distance);
                 break;
         }
+        if (_currentState == State.Patrol || _currentState == State.Chase)
+        {
+
+            HandleFootsteps();   
+        }
+    }
+
+    private void HandleFootsteps()
+    {
+        if (audioSource == null || footstepClip.Length == 0)
+        {
+            return; // nếu không có audioSource hoặc không có clip âm thanh bước chân thì thoát
+        }
+        if (agent.velocity.magnitude > 0.1f && !agent.isStopped)
+        {
+            footstepTimer += Time.deltaTime;
+            if (footstepTimer >= stepInterval)
+            {
+                footstepTimer = 0f;
+                audioSource.pitch = Random.Range(0.8f, 1.2f); // thay đổi pitch ngẫu nhiên để âm thanh bước chân không bị lặp lại
+                audioSource.PlayOneShot(footstepClip[Random.Range(0, footstepClip.Length)]); // phát âm thanh bước chân ngẫu nhiên
+                audioSource.pitch = 1f; // reset pitch về 1 để không ảnh hưởng đến các âm thanh khác
+
+            }
+        }
+        else
+        {
+            footstepTimer = 0f; // reset timer nếu enemy không di chuyển
+        }
     }
 
     private void ChaseState(float distance)
@@ -101,6 +138,10 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator AttackRoutine()
     {
        isAttacking = true; // đánh dấu là đang tấn công để tiếp tục
+        if (audioSource != null && attackClip != null)
+        {
+            audioSource.PlayOneShot(attackClip); // phát âm thanh tấn công
+        }
         yield return new WaitForSeconds(attackWindup); // chờ 1 giây trước khi gây sát thương
         if (playerHealth != null && Vector3.Distance(transform.position, player.position) <= attackRange)
         {
