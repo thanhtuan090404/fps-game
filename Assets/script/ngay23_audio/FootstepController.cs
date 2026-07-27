@@ -19,7 +19,7 @@ public class FootstepController : MonoBehaviour
             {
                 timer = 0f;
                 // Phát âm thanh bước chân ngẫu nhiên từ mảng footStep
-                AudioManager.Instance.PlayerSFX(footStep[Random.Range(0, footStep.Length)]);
+                AudioManager.Instance.PlaySFX(footStep[Random.Range(0, footStep.Length)]);
             }
         }
         else

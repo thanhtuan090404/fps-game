@@ -17,8 +17,8 @@ public class EnemyAI : MonoBehaviour
 
     private State _currentState = State.Patrol; // trạng thái hiện tại của enemy
 
-    [SerializeField] private Transform[] PointsA;
-    [SerializeField] private Transform[] PointB;
+    [SerializeField] private Transform[] pointsA;
+    [SerializeField] private Transform[] pointsB;
     [SerializeField] private Transform target; // điểm mà enemy đang di chuyển đến
     private bool isGoingToA = true; // biến để xác định xem enemy đang đi đến điểm A hay điểm B
 
@@ -36,7 +36,7 @@ public class EnemyAI : MonoBehaviour
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        target = PointsA[Random.Range(0, PointsA.Length)];
+        target = pointsA[Random.Range(0, pointsA.Length)];
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -50,6 +50,10 @@ public class EnemyAI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player == null || playerHealth == null || !playerHealth.IsAlive)
+        {
+            return;
+        }
         float distance = Vector3.Distance(transform.position, player.position);
 
         switch (_currentState)
@@ -107,7 +111,6 @@ public class EnemyAI : MonoBehaviour
 
     private void ChaseState(float distance)
     {
-        Debug.Log("đang truy đuổi");
         if (distance <= attackRange)
         {
             _currentState = State.Attack;
@@ -127,7 +130,6 @@ public class EnemyAI : MonoBehaviour
         {
             StartCoroutine(AttackRoutine());
         }
-        Debug.Log("đang tấn công");
         if (distance > attackRange + 0.5f) // nếu player ra khỏi tầm tấn công thì chuyển sang trạng thái truy đuổi
         {
             agent.isStopped = false; // tiếp tục di chuyển khi player ra khỏi tầm tấn công
@@ -161,7 +163,6 @@ public class EnemyAI : MonoBehaviour
 
     private void PatrolState(float distance)
     {
-        Debug.Log("đang tuần tra");
         if (distance <= detectRange)
         {
             _currentState = State.Chase;
@@ -170,20 +171,19 @@ public class EnemyAI : MonoBehaviour
 
     void ChooseNextPoint()
     {
-        Debug.Log("Đổi điểm");
 
-        if (PointsA.Length == 0 || PointB.Length == 0)
+        if (pointsA.Length == 0 || pointsB.Length == 0)
         {
             return;
         }
         if (isGoingToA)
         {
-            target = PointB[Random.Range(0, PointB.Length)];
+            target = pointsB[Random.Range(0, pointsB.Length)];
             isGoingToA = false;
         }
         else
         {
-            target = PointsA[Random.Range(0, PointsA.Length)];
+            target = pointsA[Random.Range(0, pointsA.Length)];
             isGoingToA = true;
         }
     }

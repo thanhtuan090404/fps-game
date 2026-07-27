@@ -16,7 +16,7 @@ public class AudioManager : MonoBehaviour
         }
         Instance = this;
     }
-    public void PlayerSFX(AudioClip clip , float volume = 1f , bool randomPitch = false)
+    public void PlaySFX(AudioClip clip , float volume = 1f , bool randomPitch = false)
     {
         if (clip == null) return;
 
