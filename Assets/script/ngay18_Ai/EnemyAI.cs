@@ -28,6 +28,11 @@ public class EnemyAI : MonoBehaviour
     [SerializeField] private float stepInterval = 0.5f; // khoảng thời gian giữa các bước chân
 
     private float footstepTimer = 0f; // biến đếm thời gian giữa các bước chân
+    [SerializeField] private Animator animator;
+
+    private static readonly int speedHash = Animator.StringToHash("Speed"); // hash của tham số Speed trong Animator để tăng hiệu suất
+    private static readonly int attackHash = Animator.StringToHash("Attack"); // hash của trigger Attack trong Animator để tăng hiệu suất
+
 
     private enum State
     {
@@ -37,6 +42,7 @@ public class EnemyAI : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         target = pointsA[Random.Range(0, pointsA.Length)];
+        animator = GetComponent<Animator>();
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -55,13 +61,13 @@ public class EnemyAI : MonoBehaviour
             return;
         }
         float distance = Vector3.Distance(transform.position, player.position);
-
+        // cập nhật Speed MỌI frame — khi attack, velocity ~ 0 nên Speed về 0, Animator không nhầm sang Walking
+        animator.SetFloat(speedHash, agent.velocity.magnitude);
         switch (_currentState)
         {
             case State.Patrol:
                 agent.SetDestination(target.position);
                 PatrolState(distance);
-
                 if (!agent.pathPending &&
                     agent.remainingDistance <= agent.stoppingDistance)
                 {
@@ -140,10 +146,15 @@ public class EnemyAI : MonoBehaviour
     private IEnumerator AttackRoutine()
     {
        isAttacking = true; // đánh dấu là đang tấn công để tiếp tục
+        animator.SetTrigger(attackHash); // kích hoạt animation tấn công
+        Debug.Log("Attack trigger fired!");   // tạm thời, xoá sau
+
         if (audioSource != null && attackClip != null)
         {
             audioSource.PlayOneShot(attackClip); // phát âm thanh tấn công
+
         }
+
         yield return new WaitForSeconds(attackWindup); // chờ 1 giây trước khi gây sát thương
         if (playerHealth != null && Vector3.Distance(transform.position, player.position) <= attackRange)
         {
@@ -166,6 +177,7 @@ public class EnemyAI : MonoBehaviour
         if (distance <= detectRange)
         {
             _currentState = State.Chase;
+
         }
     }
 

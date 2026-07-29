@@ -393,6 +393,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 289594686}
     - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: pointsA.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: pointsB.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
       propertyPath: 'PointB.Array.data[0]'
       value: 
       objectReference: {fileID: 1869273946}
@@ -400,6 +408,14 @@ PrefabInstance:
       propertyPath: 'PointsA.Array.data[0]'
       value: 
       objectReference: {fileID: 374390490}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: 'pointsA.Array.data[0]'
+      value: 
+      objectReference: {fileID: 374390490}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: 'pointsB.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1869273946}
     - target: {fileID: 1798116920958988957, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
       propertyPath: m_Name
       value: Enemy (2)
@@ -702,7 +718,7 @@ MonoBehaviour:
   playerCamera: {fileID: 833787531}
   maxAmmo: 30
   reloadTime: 2
-  bulletPrefab: {fileID: 2029344368374246087, guid: 4d5cf32bdaaabd649912304c75df38a3, type: 3}
+  bulletHolePrefab: {fileID: 2029344368374246087, guid: 4d5cf32bdaaabd649912304c75df38a3, type: 3}
   muzzleFlash: {fileID: 6658004794195492696, guid: d1c5ed04cc5a7a8448db1389b025a5ad, type: 3}
   shootClip: {fileID: 8300000, guid: e44e2b415ebc533499d55c8897d13bfd, type: 3}
   emptyClip: {fileID: 8300000, guid: be3166493107b4149aa064cd0021331f, type: 3}
@@ -1097,6 +1113,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 289594686}
     - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: pointsA.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: pointsB.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
       propertyPath: 'PointB.Array.data[0]'
       value: 
       objectReference: {fileID: 642669366}
@@ -1104,6 +1128,14 @@ PrefabInstance:
       propertyPath: 'PointsA.Array.data[0]'
       value: 
       objectReference: {fileID: 1754783672}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: 'pointsA.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1754783672}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: 'pointsB.Array.data[0]'
+      value: 
+      objectReference: {fileID: 642669366}
     - target: {fileID: 1798116920958988957, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
       propertyPath: m_Name
       value: Enemy (1)
@@ -2353,13 +2385,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
-      propertyPath: 'PointB.Array.data[0]'
-      value: 
-      objectReference: {fileID: 1657950429}
-    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
-      propertyPath: 'PointsA.Array.data[0]'
+      propertyPath: 'pointsA.Array.data[0]'
       value: 
       objectReference: {fileID: 2127813160}
+    - target: {fileID: 534308173913249805, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
+      propertyPath: 'pointsB.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1657950429}
     - target: {fileID: 1798116920958988957, guid: f1c44a94231d2ab4e84b133ce2e2576b, type: 3}
       propertyPath: m_Name
       value: Enemy
