@@ -15,10 +15,15 @@ public class Gun : MonoBehaviour
 
     [SerializeField] private GameObject bulletHolePrefab;
     [SerializeField] private ParticleSystem muzzleFlash;
+    [SerializeField] private ParticleSystem bloodEffectPrefab; // hiệu ứng máu khi bắn trúng enemy
+
 
     [SerializeField] private AudioClip shootClip;
     [SerializeField] private AudioClip emptyClip;
     [SerializeField] private AudioClip reloadClip;
+
+    [SerializeField] private CameraShake cameraShake; // tham chiếu đến script CameraShake để rung camera khi bắn
+
 
     public event Action<int, int> OnAmmoChanged; // event để thông báo khi số đạn thay đổi
 
@@ -75,6 +80,7 @@ public class Gun : MonoBehaviour
         currentAmmo--;
         OnAmmoChanged?.Invoke(currentAmmo, maxAmmo); // thông báo cho các listener biết số đạn đã thay đổi
         AudioManager.Instance.PlaySFX(shootClip); // phát âm thanh bắn đạn
+        cameraShake.Shake(0.1f, 0.05f); // rung camera khi bắn
         if (Physics.Raycast(playerCamera.transform.position,playerCamera.transform.forward, out RaycastHit hit, range))
         {
             Vector3 spawnPos =
@@ -85,6 +91,13 @@ public class Gun : MonoBehaviour
             if (health != null)
             {
                 health.TakeDamage(damage);
+
+                // máu văng tại điểm trúng, quay theo hướng của bề mặt trúng
+                if (bloodEffectPrefab != null)
+                {
+                    ParticleSystem bloodEffect = Instantiate(bloodEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                    Destroy(bloodEffect.gameObject, 2f); // hủy hiệu ứng máu sau 2 giây
+                }
             }
         }
     }
