@@ -799,6 +799,7 @@ MonoBehaviour:
   shootClip: {fileID: 8300000, guid: e44e2b415ebc533499d55c8897d13bfd, type: 3}
   emptyClip: {fileID: 8300000, guid: be3166493107b4149aa064cd0021331f, type: 3}
   reloadClip: {fileID: 8300000, guid: 031c71352cf472447aa0d1f70007aca1, type: 3}
+  cameraShake: {fileID: 833787532}
 --- !u!114 &289594689
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1688,6 +1689,7 @@ GameObject:
   - component: {fileID: 833787531}
   - component: {fileID: 833787530}
   - component: {fileID: 833787529}
+  - component: {fileID: 833787532}
   m_Layer: 0
   m_Name: Camera
   m_TagString: MainCamera
@@ -1814,6 +1816,18 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &833787532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 833787527}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de04ca78effe97c4193b7a78aa68b42b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraShake
 --- !u!1 &835910182
 GameObject:
   m_ObjectHideFlags: 0

@@ -96,6 +96,7 @@ public class Gun : MonoBehaviour
                 if (bloodEffectPrefab != null)
                 {
                     ParticleSystem bloodEffect = Instantiate(bloodEffectPrefab, hit.point, Quaternion.LookRotation(hit.normal));
+                    bloodEffect.Play();
                     Destroy(bloodEffect.gameObject, 2f); // hủy hiệu ứng máu sau 2 giây
                 }
             }
