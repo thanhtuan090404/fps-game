@@ -221,7 +221,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -245,7 +245,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bbb4e48011afe5469b41a079fae2f1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  health: {fileID: 0}
 --- !u!114 &534308173913249805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,6 +272,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: bf49bac71bb6c9d449d9cc563e896aa0, type: 3}
   attackClip: {fileID: 8300000, guid: 989a52ac3d6776249b812bc3ba7084c7, type: 3}
   stepInterval: 0.5
+  animator: {fileID: 0}
 --- !u!82 &3327297231960205094
 AudioSource:
   m_ObjectHideFlags: 0

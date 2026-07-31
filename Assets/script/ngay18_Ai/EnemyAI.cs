@@ -8,11 +8,11 @@ public class EnemyAI : MonoBehaviour
      private Transform player;
     private Health playerHealth; // biến lưu trữ component Health của player
     [SerializeField] private float detectRange = 5f; 
-    [SerializeField]private float attackRange = 2f; // khoảng cách để tấn công player 
+    [SerializeField]private float attackRange = 4f; // khoảng cách để tấn công player 
     private bool isAttacking = false; // biến để xác định xem enemy có đang tấn công hay không
    [SerializeField] private float attackWindup = 1f; // thời gian chờ trước khi gây sát thương
     [SerializeField]  private float attackCooldown = 1f; // thời gian chờ trước khi có thể tấn công lại
-    [SerializeField] private float damage = 10f;
+    [SerializeField] private float damage = 50f;
 
 
     private State _currentState = State.Patrol; // trạng thái hiện tại của enemy

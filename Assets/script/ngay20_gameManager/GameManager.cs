@@ -6,10 +6,11 @@ using System;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    public bool IsGameOver { get; internal set; }
 
     [SerializeField] private TextMeshProUGUI killText;
     [SerializeField] private TextMeshProUGUI messageText;
-    [SerializeField] private int killsWin = 3;
+    [SerializeField] private int killsWin = 30;
 
     private int _kills;
     private bool _gameEnded;
@@ -62,6 +63,7 @@ public class GameManager : MonoBehaviour
     private void EndGame(bool won)
     {
         _gameEnded = true;
+        IsGameOver = true;
         messageText.text = won ? "YOU WIN! (R to restart)" : "GAME OVER (R to restart)";
     }
 
