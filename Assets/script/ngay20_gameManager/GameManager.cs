@@ -1,20 +1,18 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
-using System;
 
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObject gameOver;
     public static GameManager Instance { get; private set; }
-    public bool IsGameOver { get; internal set; }
+    public bool IsGameOver { get; private set; }
 
     [SerializeField] private TextMeshProUGUI killText;
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private int killsWin = 30;
 
     private int _kills;
-    private bool _gameEnded;
 
     void Awake()
     {
@@ -34,11 +32,6 @@ public class GameManager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-       
-    } 
     public void Replay()
     {
         Time.timeScale = 1f;
@@ -57,7 +50,7 @@ public class GameManager : MonoBehaviour
 
     public void AddKill()
 {
-    if (_gameEnded) return;
+    if (IsGameOver) return;
     _kills++;
     UpdateUI();
     if (_kills >= killsWin)
@@ -74,7 +67,6 @@ public class GameManager : MonoBehaviour
 
     private void EndGame(bool won)
     {
-        _gameEnded = true;
         IsGameOver = true;
         gameOver.SetActive(true);
         messageText.text = won ? "You Win!" : "Game Over!";
