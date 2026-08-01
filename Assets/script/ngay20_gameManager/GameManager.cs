@@ -1,10 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using System;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private GameObject gameOver;
     public static GameManager Instance { get; private set; }
     public bool IsGameOver { get; internal set; }
 
@@ -23,27 +24,38 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-    }  
+    }
 
-        // Start is called once before the first execution of Update after the MonoBehaviour is created
-        void Start()
-        {
-            messageText.text = "";
-            UpdateUI();
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
+        messageText.text = "";
+        UpdateUI();
 
-        }
+    }
 
-        // Update is called once per frame
-        void Update()
-        {
-            if (_gameEnded && Input.GetKeyDown(KeyCode.R))
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //
+    // Update is called once per frame
+    void Update()
+    {
+       
+    } 
+    public void Replay()
+    {
+        Time.timeScale = 1f;
 
-            }
-        }
-    
-        public void AddKill()
+        SceneManager.LoadScene("FPS_Game");
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;  // Ẩn con trỏ chuột khi bắt đầu lại trò chơi
+    }
+    public void Quit()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("MainMenu");
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;  
+    }
+
+    public void AddKill()
 {
     if (_gameEnded) return;
     _kills++;
@@ -64,7 +76,14 @@ public class GameManager : MonoBehaviour
     {
         _gameEnded = true;
         IsGameOver = true;
-        messageText.text = won ? "YOU WIN! (R to restart)" : "GAME OVER (R to restart)";
+        gameOver.SetActive(true);
+        messageText.text = won ? "You Win!" : "Game Over!";
+
+        Time.timeScale = 0f;
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;  // Hiển thị con trỏ chuột
+
+
     }
 
 
