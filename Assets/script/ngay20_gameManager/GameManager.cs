@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviour
         UpdateUI();
 
     }
+  
 
     public void Replay()
     {

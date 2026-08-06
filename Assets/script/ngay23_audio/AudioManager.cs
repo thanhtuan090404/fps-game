@@ -6,6 +6,7 @@ public class AudioManager : MonoBehaviour
 
     [SerializeField] private AudioSource musicSource;
     [SerializeField] private AudioSource sfxSource;
+    [SerializeField] private AudioClip backgroundMusic;
 
     private void Awake()
     {
@@ -15,7 +16,27 @@ public class AudioManager : MonoBehaviour
             return;
         }
         Instance = this;
+        DontDestroyOnLoad(gameObject);
     }
+    private void Start()
+    {
+        // Phát nhạc nền khi bắt đầu trò chơi
+        if (musicSource != null && !musicSource.isPlaying)
+        {
+            musicSource.clip = backgroundMusic; // Gán clip nhạc nền vào AudioSource
+            musicSource.loop = true;
+            musicSource.Play();
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
+
     public void PlaySFX(AudioClip clip , float volume = 1f , bool randomPitch = false)
     {
         if (clip == null) return;
