@@ -47,8 +47,6 @@ public class AudioManager : MonoBehaviour
         else
             sfxSource.pitch = 1f;
         sfxSource.PlayOneShot(clip, volume);
-        // trả pitch về 1 sau khi phát âm thanh
-        sfxSource.pitch = 1f;
 
     }
 }
