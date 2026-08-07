@@ -10,7 +10,6 @@ public class HealthBarUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("UI OnEnable: " + targetHealth.CurrentHealthPercent);
 
         if (targetHealth == null) return; // nếu targethealth chưa được gán thì thoát khỏi hàm
         {
@@ -29,7 +28,6 @@ public class HealthBarUI : MonoBehaviour
 
     private void UpdateBar(float healthPercent)
     {
-        Debug.Log("UpdateBar: " + healthPercent);
 
         fillImage.fillAmount = healthPercent;
         fillImage.color = Color.Lerp(Color.red,

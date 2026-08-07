@@ -147,7 +147,6 @@ public class EnemyAI : MonoBehaviour
     {
        isAttacking = true; // đánh dấu là đang tấn công để tiếp tục
         animator.SetTrigger(attackHash); // kích hoạt animation tấn công
-        Debug.Log("Attack trigger fired!");   // tạm thời, xoá sau
 
         if (audioSource != null && attackClip != null)
         {

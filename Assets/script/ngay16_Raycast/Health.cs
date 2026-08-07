@@ -12,14 +12,12 @@ public class Health : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("Health Awake: " + CurrentHealthPercent);
 
         currentHealth = maxHealth; // khởi tạo máu hiện tại bằng máu tối đa
     }
      void Start()
     {
         OnHealthChanged?.Invoke(CurrentHealthPercent); // thông báo cho các listener biết máu đã thay đổi
-        Debug.Log("Health Start: " + CurrentHealthPercent);
     }
 
     public void TakeDamage(float amount)

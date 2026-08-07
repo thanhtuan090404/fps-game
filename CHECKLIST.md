@@ -51,3 +51,8 @@ Mở file này mỗi lần trước khi chạy `git add`. Đọc hết, không l
 - [ ] Commit message theo Conventional Commits: `feat:` `fix:` `refactor:` `chore:` `docs:`
 - [ ] Không commit: Library/ Temp/ Build/ *.exe
 - [ ] Đọc DÒNG CUỐI output mỗi lệnh — thấy `Aborting` / `error` / `up-to-date` bất thường = CHƯA xong
+## 4. Event
+- [ ] Manager mới cần dữ liệu từ event → nó TỰ đăng ký, không nhờ manager khác gọi hộ
+
+## 3. Đóng gói dữ liệu
+- [ ] Thấy mình viết `if (XxxManager.Instance != null)` → dừng lại, hỏi: thiết kế có sai không?.

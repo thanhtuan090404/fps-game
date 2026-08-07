@@ -21,8 +21,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void HandleDeath()
     {
-        GameManager.Instance.GameOver();
-        Debug.Log("Player has died.");
+        GameEvents.RaisePlayerDied();
     }
     void OnDestroy()
     {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI killText;
     [SerializeField] private TextMeshProUGUI messageText;
     [SerializeField] private int killsWin = 30;
+    [SerializeField] private TextMeshProUGUI totalKillsText; // Thêm biến để hiển thị tổng số lượng kill
 
     private int _kills;
 
@@ -32,7 +34,23 @@ public class GameManager : MonoBehaviour
         UpdateUI();
 
     }
+    private void OnEnable()
+    {
+        GameEvents.OnEnemyKilled += HandleEnemyKilled;
+        GameEvents.OnPlayerDied += GameOver;
+
+    }
+    private void OnDisable()
+    {
+        GameEvents.OnEnemyKilled -= HandleEnemyKilled;
+        GameEvents.OnPlayerDied -= GameOver;
+    }
   
+    private void HandleEnemyKilled(Vector3 position)
+    {
+        AddKill();
+    }
+
 
     public void Replay()
     {
@@ -54,7 +72,7 @@ public class GameManager : MonoBehaviour
 {
     if (IsGameOver) return;
     _kills++;
-    UpdateUI();
+        UpdateUI();
     if (_kills >= killsWin)
     {
         EndGame(true);
@@ -65,6 +83,7 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         EndGame(false);
+
     }
 
     private void EndGame(bool won)
@@ -72,7 +91,8 @@ public class GameManager : MonoBehaviour
         IsGameOver = true;
         gameOver.SetActive(true);
         messageText.text = won ? "You Win!" : "Game Over!";
-
+        totalKillsText.text =
+    "Total Kills: " + ProgressManager.Instance.TotalKills;
         Time.timeScale = 0f;
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;  // Hiển thị con trỏ chuột

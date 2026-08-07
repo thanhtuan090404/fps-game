@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     private void HandleDeath()
     {
-        GameManager.Instance.AddKill(); // gọi phương thức Addkill() của GameManager khi Enemy chết
+        GameEvents.RaiseEnemyKilled(transform.position);
         // Xử lý khi Enemy chết
         animator.SetBool(isDeadHash, true);
 
