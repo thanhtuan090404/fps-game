@@ -4,22 +4,28 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    private NavMeshAgent agent; // biến lưu trữ component NavMeshAgent của enemy
-     private Transform player;
+    private NavMeshAgent agent ; // biến lưu trữ component NavMeshagent của enemy
+    public NavMeshAgent Agent => agent; // property để truy cập component NavMeshagent của enemy
+
+    private Transform player;
+    public Transform Player => player; // property để truy cập transform của player
     private Health playerHealth; // biến lưu trữ component Health của player
+
     [SerializeField] private float detectRange = 5f; 
+    public float ChaseRange => detectRange; // property để truy cập khoảng cách phát hiện player
+
     [SerializeField]private float attackRange = 4f; // khoảng cách để tấn công player 
+    public float AttackRange => attackRange; // property để truy cập khoảng cách tấn công của enemy
     private bool isAttacking = false; // biến để xác định xem enemy có đang tấn công hay không
    [SerializeField] private float attackWindup = 1f; // thời gian chờ trước khi gây sát thương
     [SerializeField]  private float attackCooldown = 1f; // thời gian chờ trước khi có thể tấn công lại
     [SerializeField] private float damage = 50f;
 
 
-    private State _currentState = State.Patrol; // trạng thái hiện tại của enemy
-
     [SerializeField] private Transform[] pointsA;
     [SerializeField] private Transform[] pointsB;
     [SerializeField] private Transform target; // điểm mà enemy đang di chuyển đến
+    public Transform Target => target;
     private bool isGoingToA = true; // biến để xác định xem enemy đang đi đến điểm A hay điểm B
 
     [SerializeField] private AudioSource audioSource;
@@ -29,20 +35,42 @@ public class EnemyAI : MonoBehaviour
 
     private float footstepTimer = 0f; // biến đếm thời gian giữa các bước chân
     [SerializeField] private Animator animator;
-
+    public Animator Animator => animator; // property để truy cập component Animator của enemy
     private static readonly int speedHash = Animator.StringToHash("Speed"); // hash của tham số Speed trong Animator để tăng hiệu suất
+    public static int SpeedHash => speedHash; // property để truy cập hash của tham số Speed trong Animator
     private static readonly int attackHash = Animator.StringToHash("Attack"); // hash của trigger Attack trong Animator để tăng hiệu suất
 
+    [SerializeField] private float patrolSpeed = 2f; // tốc độ di chuyển khi đi tuần tra
+    public float PatrolSpeed => patrolSpeed; // property để truy cập tốc độ di chuyển khi đi tuần tra
 
-    private enum State
-    {
-        Patrol, Chase , Attack
-    }
+
+    [SerializeField] private float chaseSpeed = 3.5f; // tốc độ di chuyển khi truy đuổi player
+    public float ChaseSpeed => chaseSpeed; // property để truy cập tốc độ di chuyển khi truy đuổi player
+
+    private StateMachine stateMachine; // state machine của enemy
+    public StateMachine StateMachine => stateMachine; // property để truy cập state machine của enemy
+
+    public IEnemyState PatrolState { get; private set; } // trạng thái Patrol của enemy
+
+    public IEnemyState ChaseState { get; private set; } // trạng thái Chase của enemy
+
+    public IEnemyState AttackState { get; private set; } // trạng thái Attack của enemy
+
+    private Vector3 spawnPosition;
+
+    public Vector3 SpawnPosition => spawnPosition;
+
+    [SerializeField] private float patrolRadius = 10f;
+
+    public float PatrolRadius => patrolRadius;
+
+
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        target = pointsA[Random.Range(0, pointsA.Length)];
+        agent.avoidancePriority = Random.Range(30, 70); // đặt độ ưu tiên tránh vật cản ngẫu nhiên để tránh tình trạng enemy bị kẹt khi di chuyển
         animator = GetComponent<Animator>();
+        spawnPosition = transform.position;
 
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
@@ -50,6 +78,21 @@ public class EnemyAI : MonoBehaviour
             player = playerObj.transform;
             playerHealth = playerObj.GetComponent<Health>();
         }
+
+        // Chọn điểm Patrol ban đầu
+        if (pointsA != null && pointsA.Length > 0)
+        {
+            target = pointsA[Random.Range(0, pointsA.Length)];
+        }
+
+        // tạo state machie
+        stateMachine = new StateMachine();
+
+        PatrolState = new PatrolState(this);
+        ChaseState = new ChaseState(this);
+        AttackState = new AttackState(this);
+
+        stateMachine.Initialize(PatrolState); // khởi tạo state machine với trạng thái Patrol ban đầu
     }
 
 
@@ -60,35 +103,11 @@ public class EnemyAI : MonoBehaviour
         {
             return;
         }
-        float distance = Vector3.Distance(transform.position, player.position);
         // cập nhật Speed MỌI frame — khi attack, velocity ~ 0 nên Speed về 0, Animator không nhầm sang Walking
         animator.SetFloat(speedHash, agent.velocity.magnitude);
-        switch (_currentState)
-        {
-            case State.Patrol:
-                agent.SetDestination(target.position);
-                PatrolState(distance);
-                if (!agent.pathPending &&
-                    agent.remainingDistance <= agent.stoppingDistance)
-                {
-                    ChooseNextPoint();
-                }
-                break;
 
-            case State.Chase:
-                agent.SetDestination(player.position);
-                ChaseState(distance);
-                break;
+        stateMachine.Tick(); // gọi hàm Tick của state machine để cập nhật trạng thái của enemy
 
-            case State.Attack:
-                AttackState(distance);
-                break;
-        }
-        if (_currentState == State.Patrol || _currentState == State.Chase)
-        {
-
-            HandleFootsteps();   
-        }
     }
 
     private void HandleFootsteps()
@@ -114,34 +133,18 @@ public class EnemyAI : MonoBehaviour
             footstepTimer = 0f; // reset timer nếu enemy không di chuyển
         }
     }
+    // =========================
+    // ATTACK
+    // =========================
 
-    private void ChaseState(float distance)
+    public void StartAttack()
     {
-        if (distance <= attackRange)
-        {
-            _currentState = State.Attack;
-        }
-        else if (distance > detectRange) 
-        {
-            _currentState = State.Patrol;
-        }
-    }
-
-    private void AttackState(float distance)
-    {
-        agent.isStopped = true; // dừng di chuyển khi tấn công
-        FacePlayer(); // quay mặt về phía player
-
         if (!isAttacking)
         {
             StartCoroutine(AttackRoutine());
         }
-        if (distance > attackRange + 0.5f) // nếu player ra khỏi tầm tấn công thì chuyển sang trạng thái truy đuổi
-        {
-            agent.isStopped = false; // tiếp tục di chuyển khi player ra khỏi tầm tấn công
-            _currentState = State.Chase;
-        }
     }
+
 
     private IEnumerator AttackRoutine()
     {
@@ -164,40 +167,56 @@ public class EnemyAI : MonoBehaviour
 
     }
 
-    private void FacePlayer()
+    public void FacePlayer()
     {
+        if (player == null)
+            return;
+
         Vector3 lookPos = player.position;
-        lookPos.y = transform.position.y; // giữ nguyên trục y để không bị nghiêng
-        transform.LookAt(lookPos); // quay mặt về phía player
+        lookPos.y = transform.position.y;
+
+        transform.LookAt(lookPos);
     }
 
-    private void PatrolState(float distance)
+    // PATROL
+
+
+    public void ChooseNextPoint()
     {
-        if (distance <= detectRange)
-        {
-            _currentState = State.Chase;
-
-        }
-    }
-
-    void ChooseNextPoint()
-    {
-
-        if (pointsA.Length == 0 || pointsB.Length == 0)
+        if (pointsA == null ||
+            pointsB == null ||
+            pointsA.Length == 0 ||
+            pointsB.Length == 0)
         {
             return;
         }
+
         if (isGoingToA)
         {
-            target = pointsB[Random.Range(0, pointsB.Length)];
+            target =
+                pointsB[
+                    Random.Range(
+                        0,
+                        pointsB.Length
+                    )
+                ];
+
             isGoingToA = false;
         }
         else
         {
-            target = pointsA[Random.Range(0, pointsA.Length)];
+            target =
+                pointsA[
+                    Random.Range(
+                        0,
+                        pointsA.Length
+                    )
+                ];
+
             isGoingToA = true;
         }
     }
+
     private void OnDisable()
     {
         isAttacking = false;

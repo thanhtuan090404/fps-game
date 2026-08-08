@@ -11,7 +11,20 @@ public class Enemy : MonoBehaviour
     {
         health = GetComponent<Health>(); // lấy component Health của Enemy
         animator = GetComponent<Animator>(); // lấy component Animator của Enemy
-        health.OnDeath += HandleDeath; // đăng ký sự kiện OnDeath để xử lý khi Enemy chết
+    }
+    private void OnEnable()
+    {
+        if (health != null)
+        {
+            health.OnDeath += HandleDeath; // đăng ký sự kiện OnDeath để xử lý khi Enemy chết
+        }
+    }
+    private void OnDisable()
+    {
+        if (health != null)
+        {
+            health.OnDeath -= HandleDeath; // hủy đăng ký sự kiện OnDeath khi Enemy bị vô hiệu hóa
+        }
     }
 
     private void HandleDeath()

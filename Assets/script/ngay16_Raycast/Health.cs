@@ -4,7 +4,7 @@ using UnityEngine;
 public class Health : MonoBehaviour
 {
     [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float currentHealth;
+     private float currentHealth;
     public event Action OnDeath;    
     public event Action<float> OnHealthChanged; // event để thông báo khi máu thay đổi
     public float CurrentHealthPercent => currentHealth / maxHealth; // tính phần trăm máu hiện tại
